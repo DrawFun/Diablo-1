@@ -1,3 +1,7 @@
+'''
+负责建立服务器和客户端间的通信协议包格式
+作业中全部重用
+'''
 import struct
 import socket
 

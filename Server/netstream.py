@@ -1,5 +1,10 @@
 #!/usr/local/bin/python
 # -*- coding: utf-8 -*-
+'''
+负责建立服务器和客户端间的tcp stream
+作业中全部重用
+'''
+
 #======================================================================
 #
 # netstream.py - network data stream operation interface
@@ -246,9 +251,9 @@ class netstream(object):
 #======================================================================
 # nethost - basic tcp host
 #======================================================================
-NET_NEW =		0	# new connection��(id,tag) ip/d,port/w   <hid>
-NET_LEAVE =		1	# lost connection��(id,tag)   		<hid>
-NET_DATA =		2	# data comming��(id,tag) data...	<hid>
+NET_NEW =		0	# new connection��(id,tag) ip/d,port/w   <hid>
+NET_LEAVE =		1	# lost connection��(id,tag)   		<hid>
+NET_DATA =		2	# data comming��(id,tag) data...	<hid>
 NET_TIMER =		3	# timer event: (none, none) 
 
 

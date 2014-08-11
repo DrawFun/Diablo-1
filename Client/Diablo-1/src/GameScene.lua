@@ -51,7 +51,7 @@ function GameScene:createTileLayer()
 --        local revData = network:receive()
 --        cclog("%s", revData)        
 
-        local posMsg = MSG_SC_MOVETO_CREATE(100, logicalX, logicalY)   
+        local posMsg = MSG_SC_MOVETO_CREATE(100, gamePlayer:getPositionX(), gamePlayer:getPositionY())   
         local posMsg1 = MSG_CS_MOVETO_CREATE()   
         network:send(posMsg:marshal())
         local revPos = network:receive()

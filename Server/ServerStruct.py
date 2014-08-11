@@ -1,50 +1,50 @@
-# -*- coding: gbk -*-
-
 import heapq
 import time
-import select
 import sys
+import netstream
+
 
 class CallLater(object):
-	"""Calls a function at a later time.
-	"""
-	def __init__(self, seconds, target, *args, **kwargs):
-		super(CallLater, self).__init__()
-        	self._delay = seconds
-		self._target = target
-		self._args = args
-		self._kwargs = kwargs
-		
-		self.cancelled = False
-		self.timeout = time.time() + self._delay
+    
+    def __init__(self, seconds, target, *args, **kwargs):
+        super(CallLater, self).__init__()
+        self._delay = seconds
+        self._target = target
+        self._args = args
+        self._kwargs = kwargs
+        
+        self.cancelled = False
+        self.timeout = time.time() + self._delay
 
-	def __le__(self, other):
-		return self.timeout <= other.timeout
+    
+    def __le__(self, other):
+        return self.timeout <= other.timeout
 
-	def call(self):
-        	try:
-			self._target(*self._args, **self._kwargs)
-		except (KeyboardInterrupt, SystemExit):
-                	raise
-                	
-                return False
-                	
-	def cancel(self):
-		self.cancelled = True
+   
+    def call(self):
+            try:
+                self._target(*self._args, **self._kwargs)
+            except (KeyboardInterrupt, SystemExit):
+                raise
+                    
+            return False
+                    
+    
+    def cancel(self):
+        self.cancelled = True
+
 
 class CallEvery(CallLater):
-	"""Calls a function every x seconds.
-        """
+    def call(self):
+        try:
+            self._target(*self._args, **self._kwargs)
+        except (KeyboardInterrupt, SystemExit):
+            raise
+            
+        self.timeout = time.time() + self._delay
         
-        def call(self):
-		try:
-			self._target(*self._args, **self._kwargs)
-		except (KeyboardInterrupt, SystemExit):
-			raise
-			
-		self.timeout = time.time() + self._delay
-		
-		return True
+        return True
+   
 		
 class TimerManager(object):
 	tasks = []
@@ -146,14 +146,17 @@ class TestGameServer(GameServer):
 	def __init__(self):
 		super(TestGameServer, self).__init__(2)
 		
+		self.host = netstream.nethost(8)
+		self.host.startup(2000)
+		
 		self.tickStartTime = time.time()
 		TimerManager.addTimer(2.5, self.tickOnce)
 		
 		return
 	
 	def process(self, timeout):
-		select.select([], [], [], timeout)
-		
+		#select.select([], [], [], timeout)
+		self.host.process()
 		if time.time() - self.tickStartTime > 10.0:
 			TimerManager.cancel(self.ticktimer)
 
